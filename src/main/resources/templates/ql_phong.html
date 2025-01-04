@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quản lý phòng</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="../static/bootstrap.min.css" th:href="@{bootstrap.min.css}"/>
+    <style>
+        .navbar-nav .nav-item .nav-link {
+            color: #ffffff; /* Màu chữ ban đầu */
+        }
+
+        .navbar-nav .nav-item .nav-link:hover,
+        .navbar-nav .nav-item .nav-link:active {
+            color: #ffd700; /* Màu vàng */
+        }
+    </style>
+</head>
+<body>
+<nav style="background-color: #0F172B; color: #ffffff;" class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/index" style="color: #FEA116;"><h2>Marriott Hotel</h2></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav" >
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/ql_p">Quản lý phòng</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ql_dp" >Quản lý đặt lịch</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ql_kh" >Quản lý khách hàng</a>
+            </li>
+            <li class="nav-item" th:if="${session.currentUserPosition != 'Nhân viên'}">
+                <a class="nav-link" href="/ql_tk" >Quản lý tài khoản</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ql_tt">Quản lý thanh toán</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/bctk" >Báo cáo thống kê</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/loginUser">LogOut</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<h1 class="text-center">Quản lý Phòng</h1>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="container mt-3">
+                <h4 class="text-center">Tất cả Phòng</h4>
+                <form action="" method="get" th:action="@{/findRoom}">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm" placeholder="Enter search" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID phòng</th>
+                        <th>Số phòng</th>
+                        <th>Loại phòng</th>
+                        <th>Giá tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="room : ${rooms}">
+                        <td th:text="${room.roomId}"></td>
+                        <td th:text="${room.roomNumber}"></td>
+                        <td th:text="${room.roomType}"></td>
+                        <td th:text="${room.price}"></td>
+                        <td th:text="${room.status}"></td>
+                        <td>
+                            <a class="btn btn-danger" th:href="@{/delete?id={id}(id=${room.roomId})}">Xóa</a>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h4 class="text-center">Thêm mới phòng</h4>
+
+            <form action="#" method="post" th:object="${room}" th:action="@{CRUroom}">
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+                <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+                <div>
+                    <label>Mã phòng:</label>
+                    <input type="text" class="form-control" placeholder="Nhập mã phòng" th:field="*{roomId}">
+                </div>
+                <div>
+                    <label>Số phòng:</label>
+                    <input type="text" class="form-control" placeholder="Nhập số phòng" th:field="*{roomNumber}">
+                </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                <div>
+                    <label>Loại phòng:</label>
+                    <select class="form-control" th:field="*{roomType}">
+                        <option value="">--Chọn loại phòng--</option>
+                        <option value="Standard">Standard</option>
+                        <option value="Superior">Superior</option>
+                        <option value="Premium">Premium</option>
+                        <option value="Premium">Deluxe</option>
+                        <option value="Suite">Suite</option>
+                    </select>
+                <div style="clear: both; display: block; height: 10px"></div>
+                <div>
+                    <label >Giá tiền:</label>
+                    <input type="text"  class="form-control" placeholder="Nhập giá tiền" th:field="*{price}" id="price-input"/>
+                </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                    <div>
+                        <label >Trạng thái:</label>
+                        <select class="form-control" th:field="*{status}">
+                            <option value="">--Chọn trạng thái--</option>
+                            <option value="Trống">Trống</option>
+                            <option value="Đã đặt">Đã đặt</option>
+                        </select>
+                    </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                    <input type="hidden" th:field="*{roomId}" />
+                    <button class="btn btn-success" type="submit" name="action" value="add">Thêm mới</button>
+                    <button class="btn btn-success" type="submit" name="action" value="update">Cập nhật</button>
+                    <button class="btn btn-success" type="submit" name="action" value="reset">Làm mới</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('price-input').addEventListener('input', function() {
+        let value = this.value;
+
+        // Chỉ cho phép nhập số
+        value = value.replace(/\D/g, '');
+
+        // Định dạng lại giá trị
+        if (value === '') {
+            this.value = '';
+        } else {
+            value = parseFloat(value).toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+                useGrouping: true
+            });
+            this.value = value;
+        }
+    });
+</script>
+</body>
+</html>

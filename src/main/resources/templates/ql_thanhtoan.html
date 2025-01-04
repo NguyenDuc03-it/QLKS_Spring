@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quản lý thanh toán</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="../static/bootstrap.min.css" th:href="@{bootstrap.min.css}"/>
+    <style>
+        .navbar-nav .nav-item .nav-link {
+            color: #ffffff; /* Màu chữ ban đầu */
+        }
+
+        .navbar-nav .nav-item .nav-link:hover,
+        .navbar-nav .nav-item .nav-link:active {
+            color: #ffd700; /* Màu vàng */
+        }
+    </style>
+</head>
+<body>
+    <nav style="background-color: #0F172B; color: #ffffff;" class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/index" style="color: #FEA116;"><h2>Marriott Hotel</h2></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav" >
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/ql_p">Quản lý phòng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ql_dp" >Quản lý đặt lịch</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ql_kh" >Quản lý khách hàng</a>
+                </li>
+                <li class="nav-item" th:if="${session.currentUserPosition != 'Nhân viên'}">
+                    <a class="nav-link" href="/ql_tk" >Quản lý tài khoản</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ql_tt">Quản lý thanh toán</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/bctk" >Báo cáo thống kê</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/loginUser">LogOut</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<h1 class="text-center">Quản lý thanh toán</h1>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="container mt-3">
+                <h4 class="text-center">Tất cả thanh toán</h4>
+                <form action="" method="get">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="keyword" placeholder="Search by name or email" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Mã thanh toán</th>
+                        <th>Mã đặt phòng</th>
+                        <th>Số phòng</th>
+                        <th>Mã nhân viên</th>
+                        <th>Tên nhân viên</th>
+                        <th>Ngày thanh toán</th>
+                        <th>Số tiền thanh toán</th>
+                        
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tt : ${thanhtoan}">
+                        <td th:text="${tt.payment_id }"></td>
+                        <td th:text="${tt.booking.booking_id}"></td>
+                        <td th:text="${tt.booking.room.roomNumber}"></td>
+                        <td th:text="${tt.user.user_id}"></td>
+                        <td th:text="${tt.user.username}"></td>
+                        <td th:text="${tt.payment_date}"></td>
+                        <td th:text="${tt.amount}"></td>
+
+                        <td>
+                            <a type="submit" class="btn btn-danger">Xóa</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h4 class="text-center">Thêm mới thanh toán</h4>
+            <form action="#" method="post">
+                <div>
+                    <label > Mã thanh toán:</label>
+                    <input type="text"  class="form-control" placeholder="Mã thanh toán"/>
+                </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                <div>
+                    <label >Mã đặt phòng:</label>
+                    <input type="text"  class="form-control" placeholder="Mã đặt phòng"/>
+                </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                <div>
+                    <label >Số phòng:</label>
+                    <input type="text"  class="form-control" placeholder="Số phòng"/>
+                </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                <div>
+                    <label >Mã nhân viên:</label>
+                    <input type="text"  class="form-control" placeholder="Mã nhân viên"/>
+                </div>
+                <div>
+                    <label > Tên nhân viên:</label>
+                    <input type="text"  class="form-control" placeholder="Tên nhân viên"/>
+                </div>
+                <div>
+                    <label > Ngày thanh toán</label>
+                    <input type="date"  class="form-control" placeholder="Ngày thanh toán"/>
+                </div>
+                <div>
+                    <label > Số tiền thanh toán</label>
+                    <input type="date"  class="form-control" placeholder="Số tiền thanh toán"/>
+                </div>
+                <div style="clear: both; display: block; height: 10px"></div>
+                <button class="btn btn-success" type="submit">Thêm mới</button>
+                <button class="btn btn-success" type="submit">Cập nhật</button>
+                <button class="btn btn-success" type="submit">Làm mới</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
